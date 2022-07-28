@@ -1,0 +1,21 @@
+.nav-style {
+    position: relative;
+
+}
+
+.nav-item {
+    text-shadow: 1px 1px 1px silver;
+}
+
+
+.welcome-container {
+    position: relative;
+}
+
+.welcome-user {
+    font-size: 24px;
+    text-shadow: 1px 1px 1px rgb(0, 0, 0);
+    position: absolute;
+    right: .5em;
+    top: .1em;
+}

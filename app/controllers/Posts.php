@@ -73,12 +73,13 @@ class Posts extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Sanitize POST array
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
             $data = [
                 'id' => $id,
                 'title' => trim($_POST['title']),
                 'body' => trim($_POST['body']),
+                'likes' => $_POST['likes'],
                 'user_id' => $_SESSION['user_id'],
                 'title_err' => '',
                 'body_err' => ''
@@ -154,5 +155,15 @@ class Posts extends Controller
         } else {
             redirect('posts');
         }
+    }
+
+    public function likePost($id)
+    {
+        // Fetch existing post from model
+        $post = $this->postModel->getPostById($id);
+        $post->likes++;
+        echo json_encode($post, JSON_PRETTY_PRINT);
+        $this->postModel->likePost($post);
+        redirect('posts');
     }
 }

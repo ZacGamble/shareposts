@@ -45,11 +45,12 @@ class Post
     }
     public function updatePost($data)
     {
-        $this->db->query('UPDATE posts SET title = :title, body = :body WHERE id = :id');
+        $this->db->query('UPDATE posts SET title = :title, body = :body, likes = :likes WHERE id = :id');
         // Bind values
         $this->db->bind(':id', $data['id']);
         $this->db->bind(':title', $data['title']);
         $this->db->bind(':body', $data['body']);
+        $this->db->bind(':likes', $data['likes']);
 
         // Execute
         if ($this->db->execute()) {
@@ -73,6 +74,21 @@ class Post
         $this->db->query('DELETE FROM posts WHERE id = :id');
         // Bind values
         $this->db->bind(':id', $id);
+
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function likePost($post)
+    {
+        $this->db->query('UPDATE posts SET likes = :likes WHERE id = :id');
+        // Bind values
+        $this->db->bind(':id', $post->id);
+        $this->db->bind(':likes', $post->likes);
 
         // Execute
         if ($this->db->execute()) {

@@ -25,6 +25,11 @@
         </div>
         <p class="card-text"><?php echo $post->body; ?></p>
         <a href="<?php echo URLROOT; ?>/posts/show/<?php echo $post->postId; ?>" class="btn btn-dark">More</a>
+
+        <form action="<?php echo URLROOT; ?>/posts/likePost/<?php echo $post->postId; ?>" method="post" class="">
+            <button type="submit" class="btn btn-info">Like! <?php echo $post->likes; ?></button>
+        </form>
+
     </div>
 <?php endforeach; ?>
 <?php require APPROOT . '/views/inc/footer.php' ?>

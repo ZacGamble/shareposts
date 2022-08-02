@@ -161,7 +161,6 @@ class Posts extends Controller
     {
         // Fetch existing post from model
         $post = $this->postModel->getPostById($id);
-        $post->likes++;
         echo json_encode($post, JSON_PRETTY_PRINT);
         $this->postModel->likePost($post);
         redirect('posts');

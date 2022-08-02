@@ -13,11 +13,15 @@ class Post
         $this->db->query('SELECT *,
                           posts.id AS postId,
                           users.id AS userId,
+                          count(likes.id) as likes,
                           posts.created_at AS postCreated,
                           users.created_at AS userCreated
                           FROM posts
                           INNER JOIN users
                           ON posts.user_id = users.id
+                          LEFT JOIN likes
+                          ON likes.postId = posts.id
+                          GROUP BY posts.id
                           ORDER BY posts.created_at DESC');
 
         $results = $this->db->resultSet();
@@ -85,10 +89,18 @@ class Post
 
     public function likePost($post)
     {
-        $this->db->query('UPDATE posts SET likes = :likes WHERE id = :id');
+
+        $this->db->query('INSERT INTO likes (user_id, postId) 
+                        SELECT :user_id, :postId FROM posts
+                        WHERE EXISTS(
+                        SELECT id FROM posts WHERE id = :postId)
+                        AND NOT EXISTS(
+                        SELECT id FROM likes
+                        WHERE user_id = :user_id and postId = :postId)
+                        LIMIT 1');
         // Bind values
-        $this->db->bind(':id', $post->id);
-        $this->db->bind(':likes', $post->likes);
+        $this->db->bind(':user_id', $_SESSION['user_id']);
+        $this->db->bind(':postId', $post->id);
 
         // Execute
         if ($this->db->execute()) {

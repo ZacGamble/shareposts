@@ -18,20 +18,25 @@
     </div>
 </div>
 <?php foreach ($data['posts'] as $post) : ?>
-    <div class="card card-body mb-3">
+    <div class="card card-body mb-3 post-card shadow rounded">
         <h4 class="card-title"><?php echo $post->title ?></h4>
         <div class="bg-light p-2 mb-3">
             Authored by <?php echo $post->name; ?> on <?php echo $post->postCreated; ?>
         </div>
         <p class="card-text"><?php echo $post->body; ?></p>
-        <a href="<?php echo URLROOT; ?>/posts/show/<?php echo $post->postId; ?>" class="btn btn-dark">More</a>
+        <div class="d-flex justify-content-between">
 
-        <form action="<?php echo URLROOT; ?>/posts/likePost/<?php echo $post->postId; ?>" method="post" class="">
-            <button type="submit" class="btn btn-info">Like! People like this: <?= $post->likes ?> </button>
-        </form>
+            <div>
+                <a href="<?php echo URLROOT; ?>/posts/show/<?php echo $post->postId; ?>" class="btn btn-dark">More</a>
+            </div>
+            <div class="d-flex">
 
-
-
+                <form action="<?php echo URLROOT; ?>/posts/likePost/<?php echo $post->postId; ?>" method="post" class="me-5">
+                    <button type="submit" class="btn btn-info">Like! </button>
+                </form>
+                <div class="move">Total likes: <span class="fs-2 fw-bold"><?= $post->likes ?></span> </div>
+            </div>
+        </div>
     </div>
 
 

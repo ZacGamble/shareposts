@@ -19,3 +19,8 @@
     right: .5em;
     top: .1em;
 }
+
+.post-card {
+    box-shadow: 2px 2px 2px black;
+
+}

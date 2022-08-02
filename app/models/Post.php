@@ -102,8 +102,8 @@ class Post
         $this->db->bind(':user_id', $_SESSION['user_id']);
         $this->db->bind(':postId', $post->id);
 
-        // Execute
         if ($this->db->execute()) {
+
             return true;
         } else {
             return false;

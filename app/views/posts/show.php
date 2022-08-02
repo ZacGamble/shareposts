@@ -3,7 +3,7 @@
 <br>
 <div class="row">
     <h1><?php echo $data['post']->title; ?></h1>
-    <div class="bg-secondary text-white p-2 mb-3">
+    <div class="bg-secondary text-white p-2 my-3">
         Authored by <?php echo $data['user']->name; ?> on <?php echo $data['post']->created_at; ?>
     </div>
     <p><?php echo $data['post']->body; ?></p>

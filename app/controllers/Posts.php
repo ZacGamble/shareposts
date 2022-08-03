@@ -157,11 +157,21 @@ class Posts extends Controller
         }
     }
 
-    public function likePost($id)
+    public function likePost($postId)
     {
         // Fetch existing post from model
-        $post = $this->postModel->getPostById($id);
-        echo json_encode($post, JSON_PRETTY_PRINT);
+        $post = $this->postModel->getPostById($postId);
+
+        // A function that checks if I liked this post already, if so delete.
+        $likeExists = $this->postModel->examineLikes($_SESSION['user_id'], $post);
+
+        if ($likeExists->user_id == $_SESSION['user_id']) {
+            // die('It passed logic check on likePost line 169');
+            $this->postModel->deleteLike($postId, $_SESSION['user_id']);
+            redirect('posts');
+            return;
+        }
+
         $this->postModel->likePost($post);
         redirect('posts');
     }

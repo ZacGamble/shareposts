@@ -66,7 +66,7 @@ class Post
 
     public function getPostById($id)
     {
-        $this->db->query('SELECT * FROM posts WHERE id = :id');
+        $this->db->query('SELECT * from posts WHERE id = :id');
         $this->db->bind(':id', $id);
 
         $row = $this->db->single();
@@ -108,5 +108,34 @@ class Post
         } else {
             return false;
         }
+    }
+
+    public function examineLikes($userId, $post)
+    {
+        $this->db->query('SELECT * FROM likes WHERE likes.user_id = :id AND  likes.postId = :postId');
+
+        $this->db->bind(':id', $userId);
+        $this->db->bind(':postId', $post->id);
+
+
+        // $this->db->execute();
+        $row = $this->db->single();
+
+        return $row;
+    }
+
+    public function deleteLike($postId, $user_id)
+    {
+
+        // die('Delete function 129');
+        $this->db->query('DELETE FROM likes WHERE postId = :postId AND likes.user_id = :user_id LIMIT 1');
+        // Bind values
+        $this->db->bind(':postId', $postId);
+        $this->db->bind(':user_id', $user_id);
+
+        // die('It is getting to line 132 in post.php');
+
+        // Execute
+        if ($this->db->execute());
     }
 }

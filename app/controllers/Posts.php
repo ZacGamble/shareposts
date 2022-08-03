@@ -14,8 +14,10 @@ class Posts extends Controller
     {
         // Get posts
         $posts = $this->postModel->getPosts();
+
         $data = [
-            'posts' => $posts
+            'posts' => $posts,
+
         ];
 
         $this->view('posts/index', $data);
@@ -128,10 +130,12 @@ class Posts extends Controller
     {
         $post = $this->postModel->getPostById($id);
         $user = $this->userModel->getUserById($post->user_id);
+        $comments = $this->postModel->getComments($id);
 
         $data = [
             'post' => $post,
-            'user' => $user
+            'user' => $user,
+            'comments' => $comments
         ];
         $this->view('posts/show', $data);
     }
@@ -174,5 +178,47 @@ class Posts extends Controller
 
         $this->postModel->likePost($post);
         redirect('posts');
+    }
+
+    public function addComment($postId)
+    {
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+            // Sanitize POST array
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $data = [
+                'body' => trim($_POST['body']),
+                'user_id' => $_SESSION['user_id'],
+                'post_id' => $postId,
+                'body_err' => ''
+            ];
+
+            // Validate data
+            if (empty($data['body'])) {
+                $data['body_err'] = 'Please enter body text';
+            }
+
+            // Make sure there are no errors
+            if (empty($data['body_err'])) {
+                // Validated
+                if ($this->postModel->addComment($data)) {
+                    flash('post_message', 'Comment Added');
+                    redirect('posts/show/' . $postId);
+                } else {
+                    die('Something went terribly wrong...');
+                }
+            } else {
+                // Load view with errors
+                $this->view('posts/addComment', $data);
+            }
+        } else {
+        }
+
+        $data = [
+            'body' => ''
+        ];
+
+        $this->view('posts/add', $data);
     }
 }

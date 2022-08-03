@@ -31,6 +31,25 @@ class Post
         unset($item);
         return $results;
     }
+    public function getComments($id)
+    {
+        $this->db->query('SELECT c.*,
+                          u.name AS username
+                          FROM comments c
+                          JOIN users u
+                          ON c.user_id = u.id
+                          WHERE c.post_id = :id
+                          ;');
+
+        $this->db->bind(':id', $id);
+
+        $results = $this->db->resultSet();
+        // foreach ($results as &$item) {
+        //     $item->postCreated = substr($item->postCreated, 0, 10);
+        // }
+        // unset($item);
+        return $results;
+    }
 
     public function addPost($data)
     {
@@ -137,5 +156,22 @@ class Post
 
         // Execute
         if ($this->db->execute());
+    }
+
+    public function addComment($data)
+    {
+
+        $this->db->query('INSERT INTO comments (user_id, body, post_id) VALUES (:user_id, :body, :post_id)');
+        // Bind values
+        $this->db->bind(':user_id', $data['user_id']);
+        $this->db->bind(':body', $data['body']);
+        $this->db->bind(':post_id', $data['post_id']);
+
+        // Execute
+        if ($this->db->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }

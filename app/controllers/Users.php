@@ -167,4 +167,8 @@ class Users extends Controller
         session_destroy();
         redirect("users/login");
     }
+
+    public function profile()
+    {
+    }
 }

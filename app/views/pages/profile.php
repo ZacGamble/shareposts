@@ -1,22 +1,7 @@
 <?php require APPROOT . '/views/inc/header.php' ?>
-<?php flash('post_message'); ?>
-
-<div class="row mb-4 justify-content-between d-flex">
-    <div class="col-md-6">
-        <h1>Posts</h1>
-    </div>
-    <div class="col-md-6">
-        <div class="d-flex welcome-container">
-
-            <a href="<?php echo URLROOT; ?>/posts/add" class="btn btn-primary pull-right">
-                <i class="mdi mdi-pencil"></i> Add Post
-            </a>
-            <?php if (isset($_SESSION['user_id'])) : ?>
-                <span class="welcome-user">Welcome <?php echo $_SESSION['user_name']; ?>!</span>
-            <?php endif; ?>
-        </div>
-    </div>
-</div>
+<h1><?php echo $data['title']; ?></h1>
+<p><?php echo $data['description']; ?><br>
+    User: <?php echo $data['user']->name; ?></p>
 
 <?php foreach ($data['posts'] as $post) : ?>
     <div class="card card-body mb-3 post-card shadow rounded">
@@ -46,3 +31,5 @@
 
 <?php endforeach; ?>
 <?php require APPROOT . '/views/inc/footer.php' ?>
+
+<?php

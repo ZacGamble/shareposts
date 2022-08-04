@@ -44,10 +44,6 @@ class Post
         $this->db->bind(':id', $id);
 
         $results = $this->db->resultSet();
-        // foreach ($results as &$item) {
-        //     $item->postCreated = substr($item->postCreated, 0, 10);
-        // }
-        // unset($item);
         return $results;
     }
 

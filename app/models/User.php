@@ -64,4 +64,30 @@ class User
         $row = $this->db->single();
         return $row;
     }
+
+    public function getUserPosts($id)
+    {
+        $this->db->query('SELECT *,
+        posts.id AS postId,
+        users.id AS userId,
+        count(likes.id) as likes,
+        posts.created_at AS postCreated,
+        users.created_at AS userCreated
+        FROM posts
+        INNER JOIN users
+        ON posts.user_id = users.id
+        LEFT JOIN likes
+        ON likes.postId = posts.id
+        WHERE posts.user_id = :id
+        GROUP BY posts.id
+        ORDER BY posts.created_at DESC');
+
+        $this->db->bind(':id', $id);
+        $results = $this->db->resultSet();
+        foreach ($results as &$item) {
+            $item->postCreated = substr($item->postCreated, 0, 10);
+        }
+        unset($item);
+        return $results;
+    }
 }

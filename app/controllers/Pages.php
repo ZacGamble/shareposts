@@ -3,6 +3,7 @@ class Pages extends Controller
 {
     public function __construct()
     {
+        $this->userModel = $this->model("User");
     }
 
     public function index()
@@ -24,5 +25,20 @@ class Pages extends Controller
             'description' => 'App to share posts with other users'
         ];
         $this->view('pages/about', $data);
+    }
+
+    public function profile($id)
+    {
+
+        $userProfile = $this->userModel->getUserById($id);
+        $userPosts = $this->userModel->getUserPosts($id);
+
+        $data = [
+            'title' => 'Profile',
+            'description' => 'Profile details',
+            'user' => $userProfile,
+            'posts' => $userPosts
+        ];
+        $this->view('pages/profile', $data);
     }
 }

@@ -28,7 +28,7 @@ class Posts extends Controller
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             // Sanitize POST array
-            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_STRING);
+            $_POST = filter_input_array(INPUT_POST, FILTER_SANITIZE_SPECIAL_CHARS);
 
             $data = [
                 'title' => trim($_POST['title']),
@@ -170,14 +170,36 @@ class Posts extends Controller
         $likeExists = $this->postModel->examineLikes($_SESSION['user_id'], $post);
 
         if ($likeExists->user_id == $_SESSION['user_id']) {
-            // die('It passed logic check on likePost line 169');
             $this->postModel->deleteLike($postId, $_SESSION['user_id']);
             redirect('posts');
             return;
         }
 
+        // if session user has not liked post, create new like entry
         $this->postModel->likePost($post);
         redirect('posts');
+        return;
+    }
+
+
+    public function likePostFromProfile($postId)
+    {
+        // Fetch existing post from model
+        $post = $this->postModel->getPostById($postId);
+
+        // A function that checks if I liked this post already, if so delete.
+        $likeExists = $this->postModel->examineLikes($_SESSION['user_id'], $post);
+
+        if ($likeExists->user_id == $_SESSION['user_id']) {
+            $this->postModel->deleteLike($postId, $_SESSION['user_id']);
+            redirect('pages/profile/' . $post->user_id);
+            return;
+        }
+
+        // if session user has not liked post, create new like entry
+        $this->postModel->likePost($post);
+        redirect('pages/profile/' . $post->user_id);
+        return;
     }
 
     public function addComment($postId)

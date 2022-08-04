@@ -67,20 +67,20 @@ class User
 
     public function getUserPosts($id)
     {
-        $this->db->query('SELECT *,
-        posts.id AS postId,
-        users.id AS userId,
-        count(likes.id) as likes,
-        posts.created_at AS postCreated,
-        users.created_at AS userCreated
-        FROM posts
-        INNER JOIN users
-        ON posts.user_id = users.id
-        LEFT JOIN likes
-        ON likes.postId = posts.id
-        WHERE posts.user_id = :id
-        GROUP BY posts.id
-        ORDER BY posts.created_at DESC');
+        $this->db->query('SELECT p.*,
+        u.name AS name,
+        p.id AS postId,
+        count(l.id) as likes,
+        p.created_at AS postCreated,
+        u.created_at AS userCreated
+        FROM posts p
+        INNER JOIN users u
+        ON p.user_id = u.id
+        LEFT JOIN likes l
+        ON l.postId = p.id
+        WHERE p.user_id = :id
+        GROUP BY p.id
+        ORDER BY p.created_at DESC');
 
         $this->db->bind(':id', $id);
         $results = $this->db->resultSet();

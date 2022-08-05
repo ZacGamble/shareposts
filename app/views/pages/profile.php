@@ -1,5 +1,5 @@
 <?php require APPROOT . '/views/inc/header.php' ?>
-
+<?php flash('post_message'); ?>
 
 <h1><?php echo $data['user']->name; ?>'s posts</h1>
 <div class="mt-5"></div>
@@ -9,7 +9,9 @@
     <div class="card card-body mb-3 post-card shadow rounded">
         <div class="d-flex justify-content-between">
             <h4 class="card-title"><?php echo $post->title ?></h4>
-            <a href="<?php echo URLROOT; ?>/pages/profile/<?php echo $post->userId; ?>"><?php echo 'Go to ' . $post->name . "'s profile" ?></a>
+            <?php if ($_SERVER["REQUEST_URI"] == 'shareposts/pages/profile/' . $post->user_id) : ?>
+                <a href="<?php echo URLROOT; ?>/pages/profile/<?php echo $post->userId; ?>"><?php echo 'Go to ' . $post->name . "'s profile" ?></a>
+            <?php endif; ?>
         </div>
         <div class="bg-light p-2 mb-3">
             Authored by <?php echo $post->name; ?> on <?php echo $post->postCreated; ?>

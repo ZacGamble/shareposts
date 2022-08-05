@@ -81,7 +81,7 @@ class Posts extends Controller
                 'id' => $id,
                 'title' => trim($_POST['title']),
                 'body' => trim($_POST['body']),
-                'likes' => $_POST['likes'],
+                // 'likes' => $_POST['likes'],
                 'user_id' => $_SESSION['user_id'],
                 'title_err' => '',
                 'body_err' => ''
